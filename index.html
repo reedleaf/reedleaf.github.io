@@ -1,97 +1,68 @@
+<!--
+WebGL Water
+http://madebyevan.com/webgl-water/
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml"> 
-<head>
- <title>JS1k: Breathing Galaxies (1013 bytes)</title>
- <script type="text/javascript">
-window.onload = function () {
-	C = Math.cos; // cache Math objects
-	S = Math.sin;
-	U = 0;
-	w = window;
-	j = document;
-	d = j.getElementById("c");
-	c = d.getContext("2d");
-	W = d.width = w.innerWidth;
-	H = d.height = w.innerHeight;
-	c.fillRect(0, 0, W, H); // resize <canvas> and draw black rect (default)
-	c.globalCompositeOperation = "lighter"; // switch to additive color application
-	c.lineWidth = 0.2;
-	c.lineCap = "round";
-	var bool = 0, 
-		t = 0; // theta
-	d.onmousemove = function (e) {
-		if(window.T) {
-			if(D==9) { D=Math.random()*15; f(1); }
-			clearTimeout(T);
-		}
-		X = e.pageX; // grab mouse pixel coords
-		Y = e.pageY;
-		a=0; // previous coord.x
-		b=0; // previous coord.y 
-		A = X, // original coord.x
-		B = Y; // original coord.y
-		R=(e.pageX/W * 999>>0)/999;
-		r=(e.pageY/H * 999>>0)/999;
-		U=e.pageX/H * 360 >>0;
-		D=9;
-		g = 360 * Math.PI / 180;
-		T = setInterval(f = function (e) { // start looping spectrum
-			c.save();
-			c.globalCompositeOperation = "source-over"; // switch to additive color application
-			if(e!=1) {
-				c.fillStyle = "rgba(0,0,0,0.02)";
-				c.fillRect(0, 0, W, H); // resize <canvas> and draw black rect (default)
-			}
-			c.restore();
-			i = 25; while(i --) {
-				c.beginPath();
-				if(D > 450 || bool) { // decrease diameter
-					if(!bool) { // has hit maximum
-						bool = 1;
-					}
-					if(D < 0.1) { // has hit minimum
-						bool = 0;
-					}
-					t -= g; // decrease theta
-					D -= 0.1; // decrease size
-				}
-				if(!bool) {
-					t += g; // increase theta
-					D += 0.1; // increase size
-				}
-				q = (R / r - 1) * t; // create hypotrochoid from current mouse position, and setup variables (see: http://en.wikipedia.org/wiki/Hypotrochoid)
-				x = (R - r) * C(t) + D * C(q) + (A + (X - A) * (i / 25)) + (r - R); // center on xy coords
-				y = (R - r) * S(t) - D * S(q) + (B + (Y - B) * (i / 25));
-				if (a) { // draw once two points are set
-					c.moveTo(a, b);
-					c.lineTo(x, y)
-				}
-				c.strokeStyle = "hsla(" + (U % 360) + ",100%,50%,0.75)"; // draw rainbow hypotrochoid
-				c.stroke();
-				a = x; // set previous coord.x
-				b = y; // set previous coord.y
-			}
-			U -= 0.5; // increment hue
-			A = X; // set original coord.x
-			B = Y; // set original coord.y
-		}, 16);
-	}
-	j.onkeydown = function(e) { a=b=0; R += 0.05 }
-	d.onmousemove({pageX:300, pageY:290})
-}
+Copyright 2011 Evan Wallace
+Released under the MIT license
+-->
 
-</script>
-</head>
-<body>
- <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1020273485&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:1020273485:41" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
-	<h1 style="text-align:center">ReedLeaf.com</h1>
-<canvas id="c"></canvas>
-</body>
-</html>
-
-
-
-
-
-
+<!DOCTYPE html>
+<html><head>
+  <title>WebGL Water</title>
+  <script src="OES_texture_float_linear-polyfill.js"></script>
+  <script src="lightgl.js"></script>
+  <script src="cubemap.js"></script>
+  <script src="renderer.js"></script>
+  <script src="water.js"></script>
+  <script src="main.js"></script>
+  <style type="text/css">
+    * { -webkit-user-select: none; -moz-user-select: none; cursor: default; }
+    body { font: 13px/18px Arial, sans-serif; background: black; color: white; overflow: hidden; }
+    a { color: inherit; cursor: pointer; }
+    img { display: none; }
+    ul { padding: 0 0 0 20px; }
+    h1 { font: bold italic 30px/30px Georgia; text-align: center; }
+    h2 { font: bold italic 17px/17px Georgia; padding-top: 10px; }
+    small { display: block; font-size: 11px; line-height: 15px; }
+    canvas { position: absolute; top: 100px; left: 0; }
+    #help { position: absolute; top: 100px; right: 0; bottom: 0; width: 280px; padding-right: 20px; overflow: auto; }
+    #loading { position: absolute; left: 0; top: 50%; right: 300px; text-align: center; margin-top: -8px; }
+  </style>
+</head><body>
+<div style="text-align:center;clear:both">
+<script src="/gg_bd_ad_720x90.js" type="text/javascript"></script>
+<script src="/follow.js" type="text/javascript"></script>
+</div>
+  <div id="loading">Loading...</div>
+  <div id="help">
+    <h1>WebGL Water</h1>
+    <p>Made by <a href="http://madebyevan.com/">Evan Wallace</a></p>
+    <p>This demo requires a decent graphics card and up-to-date drivers. If you can't run the demo, you can still <a href="http://youtube.com/watch?v=R0O_9bp3EKQ">see it on YouTube</a>.</p>
+    <h2>Interactions:</h2>
+    <ul>
+      <li>Draw on the water to make ripples</li>
+      <li>Drag the background to rotate the camera</li>
+      <li>Press SPACEBAR to pause and unpause</li>
+      <li>Drag the sphere to move it around</li>
+      <li>Press the L key to set the light direction</li>
+      <li>Press the G key to toggle gravity</li>
+    </ul>
+    <h2>Features:</h2>
+    <ul>
+      <li>Raytraced reflections and refractions</li>
+      <li>Analytic ambient occlusion</li>
+      <li>Heightfield water simulation *</li>
+      <li>Soft shadows</li>
+      <li>Caustics **</li>
+    </ul>
+    <p><small>* requires the OES_texture_float extension<br>** requires the OES_standard_derivatives extension</small></p>
+    <p><small>Tile texture from <a href="http://www.flickr.com/photos/zooboing/3682834083/">zooboing</a> on Flickr</small></p>
+  </div>
+  <img id="tiles" src="tiles.jpg">
+  <img id="xneg" src="xneg.jpg">
+  <img id="xpos" src="xpos.jpg">
+  <img id="ypos" src="ypos.jpg">
+  <img id="zneg" src="zneg.jpg">
+  <img id="zpos" src="zpos.jpg">
+  
+</body></html>
