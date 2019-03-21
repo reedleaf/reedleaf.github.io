@@ -1,435 +1,96 @@
 
-<!DOCTYPE html>
-
-<html>
-
- 
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
 <head>
+ <title>JS1k: Breathing Galaxies (1013 bytes)</title>
+ <script type="text/javascript">
+window.onload = function () {
+	C = Math.cos; // cache Math objects
+	S = Math.sin;
+	U = 0;
+	w = window;
+	j = document;
+	d = j.getElementById("c");
+	c = d.getContext("2d");
+	W = d.width = w.innerWidth;
+	H = d.height = w.innerHeight;
+	c.fillRect(0, 0, W, H); // resize <canvas> and draw black rect (default)
+	c.globalCompositeOperation = "lighter"; // switch to additive color application
+	c.lineWidth = 0.2;
+	c.lineCap = "round";
+	var bool = 0, 
+		t = 0; // theta
+	d.onmousemove = function (e) {
+		if(window.T) {
+			if(D==9) { D=Math.random()*15; f(1); }
+			clearTimeout(T);
+		}
+		X = e.pageX; // grab mouse pixel coords
+		Y = e.pageY;
+		a=0; // previous coord.x
+		b=0; // previous coord.y 
+		A = X, // original coord.x
+		B = Y; // original coord.y
+		R=(e.pageX/W * 999>>0)/999;
+		r=(e.pageY/H * 999>>0)/999;
+		U=e.pageX/H * 360 >>0;
+		D=9;
+		g = 360 * Math.PI / 180;
+		T = setInterval(f = function (e) { // start looping spectrum
+			c.save();
+			c.globalCompositeOperation = "source-over"; // switch to additive color application
+			if(e!=1) {
+				c.fillStyle = "rgba(0,0,0,0.02)";
+				c.fillRect(0, 0, W, H); // resize <canvas> and draw black rect (default)
+			}
+			c.restore();
+			i = 25; while(i --) {
+				c.beginPath();
+				if(D > 450 || bool) { // decrease diameter
+					if(!bool) { // has hit maximum
+						bool = 1;
+					}
+					if(D < 0.1) { // has hit minimum
+						bool = 0;
+					}
+					t -= g; // decrease theta
+					D -= 0.1; // decrease size
+				}
+				if(!bool) {
+					t += g; // increase theta
+					D += 0.1; // increase size
+				}
+				q = (R / r - 1) * t; // create hypotrochoid from current mouse position, and setup variables (see: http://en.wikipedia.org/wiki/Hypotrochoid)
+				x = (R - r) * C(t) + D * C(q) + (A + (X - A) * (i / 25)) + (r - R); // center on xy coords
+				y = (R - r) * S(t) - D * S(q) + (B + (Y - B) * (i / 25));
+				if (a) { // draw once two points are set
+					c.moveTo(a, b);
+					c.lineTo(x, y)
+				}
+				c.strokeStyle = "hsla(" + (U % 360) + ",100%,50%,0.75)"; // draw rainbow hypotrochoid
+				c.stroke();
+				a = x; // set previous coord.x
+				b = y; // set previous coord.y
+			}
+			U -= 0.5; // increment hue
+			A = X; // set original coord.x
+			B = Y; // set original coord.y
+		}, 16);
+	}
+	j.onkeydown = function(e) { a=b=0; R += 0.05 }
+	d.onmousemove({pageX:300, pageY:290})
+}
 
-    <meta charset="utf-8" />
-
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-    <title>test9-11</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" type="text/css" media="screen" href="test9-11.css" />
-
+</script>
 </head>
-
- 
-
 <body>
-
-    <header>
-
-        <div>
-
-            <div id="title">Hello World</div>
-
-            <div id="titlebottom">
-
-                China is speeding up strategic plan, standards, traffic rules, laws and regulations on accident-incurred liabilities for
-
-                its smart car industry, Economic Information Daily reported Thursday.
-
-            </div>
-
-            <div id="login">
-
-                <div>CREATE YOUR ACCOUNT</div>
-
-                <div>IT IS ABSOLUTELY FREE</div>
-
-                <div>
-
-                    <input type="text" placeholder="denis@getcraftwork.com">
-
-                    <input type="password" placeholder="Create your password">
-
-                    <input type="submit" value="SIGN UP">
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </header>
-
- 
-
-    <section>
-
-        <div id="landingpage">
-
-            <div>BOATLOADS OF AWESOME</div>
-
-            <div>Ready-made, customizable, HTML
-
-                <br>landing page sections</div>
-
-            <div id="moblie">
-
-                <div>
-
-                    <img src="image9-11/image_0001s_0001s_0000s_0000_Iphone-Icon.png" />
-
-                    <h1>Mobile First</h1>
-
-                    <p>This scenario might have seemed more likely in the universe imagined by Aristotle and Ptolemy.</p>
-
-                </div>
-
-                <div>
-
-                    <img src="image9-11/image_0001s_0001s_0002s_0001_Check-Icon.png" />
-
-                    <h1>Accessibility</h1>
-
-                    <p>Today they estimate as many as 500 billion billion sunlike stars, with 100 billion billion Earthlike
-
-                        planets.
-
-                    </p>
-
-                </div>
-
-                <div>
-
-                    <img src="image9-11/image_0001s_0001s_0001s_0000_Pencil-Icon.png" />
-
-                    <h1>Fluid Typography</h1>
-
-                    <p>The more we learn about the universe, the more absurd it would seem if all but one of those bodies were
-
-                        bereft of life.</p>
-
-                </div>
-
-                <div>
-
-                    <img src="image9-11/image_0001s_0001s_0003s_0000_Settings-Icon.png" />
-
-                    <h1>Customization</h1>
-
-                    <p>Maybe humanity is still so basic and primitive that advanced civilizations don’t think we’re worth talking
-
-                        to.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
- 
-
-    <section id="third">
-
-        <div id="supportive">
-
-            <div>Supportive policies for China's smart car</div>
-
-            <div>
-
-                Fermi wasn’t the first person to ask a variant of this question about alien intelligence. But he owns it. The query is known
-
-                around the world as the Fermi paradox. It’s typically summarized like this: If the universe is unfathomably
-
-                large, the probability of intelligent alien life seems almost certain.
-
-            </div>
-
-            <button>CHECK OUR FEATURES</button>
-
-            <button>TRY PRODUCT FOR FREE</button>
-
-        </div>
-
-        <div id="picture">
-
-            <img src="image9-11/image_0002s_0002s_0002_Screen.png" />
-
-        </div>
-
-        <div style="clear: both;"></div>
-
-    </section>
-
- 
-
-    <section>
-
-        <div id="products">
-
-            <div>Try Our Awesome Products</div>
-
-            <div id="prointroduction">
-
-                <div>
-
-                    <img src="image9-11/image_0003s_0001s_0000s_0000_Singleton.png" />
-
-                    <p>One of the most important steps in maintaining your personal brand is to stay consistent. Anytime you
-
-                        do anything online, you should consider how it contributes to your personal brand, said Matt Brady,
-
-                        founder and former CEO of career consultancy Path2Hired. </p>
-
-                </div>
-
-                <div>
-
-                    <img src="image9-11/image_0003s_0001s_0001s_0000_Hero.png" />
-
-                    <p>This means that every time you write an article, post an update on social media or interact with your
-
-                        audience, you should think about the overall message you're trying to convey. Keeping your brand
-
-                        consistent helps you build a strong brand that others will begin to recognize, Brady said.</p>
-
-                </div>
-
-                <div>
-
-                    <img src="image9-11/image_0003s_0001s_0002s_0000_Portland.png" />
-
-                    <p>This means that you should identify whether your personal brand will include facets of your personal
-
-                        life — which can further humanize your brand voice — or if you should keep your personal and professional
-
-                        worlds separate, Jones said.</p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
- 
-
-    <section>
-
-        <div id="learn">
-
-            <div>
-
-                <img src="image9-11/image_0004s_0000s_0000s_0000_图层-3.png" />
-
-                <div>
-
-                    <p>Learn How To Improve Your Personal Business</p>
-
-                    <p>A strong brand is essential if you want to succeed in business, but it's also important to have a polished
-
-                        personal brand. Your personal brand should be a genuine, honest culmination of who you are. </p>
-
-                </div>
-
-            </div>
-
-            <div style="clear: both;"></div>
-
-            <div>
-
-                <div>
-
-                    <p>Choose Between Two Beautifully Designed Color Schemes</p>
-
-                    <p>You're likely on several different social media platforms for both personal and professional uses. But
-
-                        because you use different platforms for different things, it's important for you to be aware of your
-
-                        privacy settings.</p>
-
-                </div>
-
-                <img src="image9-11/image_0004s_0001s_0000s_0000_图层-4.png" />
-
-            </div>
-
-        </div>
-
-    </section>
-
- 
-
-    <section>
-
-        <div id="crew">
-
-            <div>Our Awesome Crew</div>
-
-            <div>Our unique online teaching style makes learning easy for everyone.Whether you are trying to land a new job, brush
-
-                up on your skills.</div>
-
-            <div id="crewphoto">
-
-                <img src="image9-11/image_0005s_0001s_0000s_0002_张思远大.png" />
-
-                <img src="image9-11/image_0005s_0001s_0001s_0000_2.png" />
-
-                <img src="image9-11/image_0005s_0001s_0002s_0000_3.png" />
-
-                <img src="image9-11/image_0005s_0001s_0003s_0000_沈大师大_meitu_3.png" />
-
-            </div>
-
-        </div>
-
-    </section>
-
- 
-
-    <section id="contacts">
-
-        <div>
-
-            <div>
-
-                <div id="fell">FELL FREE TO WRITE US</div>
-
-                <input type="email" id="email" placeholder="E-mail" />
-
-                <input type="text" id="subject" placeholder="Subject" />
-
-                <input type="text" id="message" placeholder="Message" />
-
-                <input type="submit" id="send" value="SEND" />
-
-            </div>
-
-            <div>
-
-                <div id="con">
-
-                    <p>Contacts</p>
-
-                    <p>Make any design your own using the Style
-
-                        <br/>Editor.Personalize fonts, colors, and layouts to
-
-                        <br/>create the custom look you want.</p>
-
-                    <p>
-
-                        <img src="image9-11/image_0006s_0001s_0002s_0000_Map-Icon.png" />360 King Street
-
-                        <br/>Feastrvale Trevose, PA 19057</p>
-
-                    <p>
-
-                        <img src="image9-11/image_0006s_0001s_0001s_0000_Phone-Icon.png" />(755)564-84-12</p>
-
-                    <p>
-
-                        <img src="image9-11/image_0006s_0001s_0000s_0000_Mail-Icon.png" />yourname@mail.com</p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
- 
-
-    <footer>
-
-        <div>
-
-            <div>
-
-                <p>LEARN MORE</p>
-
-                <p>How it works?</p>
-
-                <p>Meeting tools</p>
-
-                <p>Live streaming</p>
-
-                <p>Contact Method</p>
-
-            </div>
-
-            <div>
-
-                <p>ABOUT US</p>
-
-                <P>About us</P>
-
-                <p>Features</p>
-
-                <p>Privacy police</p>
-
-                <p>Terms & Conditions</p>
-
-            </div>
-
-            <div>
-
-                <p>SUPPORT</p>
-
-                <p>FAQ</p>
-
-                <p>Contact us</p>
-
-                <p>Live chat</p>
-
-                <p>Phone call</p>
-
-            </div>
-
-            <div>
-
-                <p>ENJOY YOUR LIFE</p>
-
-                <p>Create web UI kit for designers,
-
-                    <br/>freelancers or business.</p>
-
-                <p></p>
-
-                <p id="icon">
-
-                    <img src="image9-11/image_0007s_0001s_0000s_0000_Twitter-Icon.png" />  
-
-                    <img src="image9-11/image_0007s_0001s_0000s_0001_Facebook-Icon.png" />  
-
-                    <img src="image9-11/image_0007s_0001s_0000s_0002_Google-Icon.png" />  
-
-                    <img src="image9-11/image_0007s_0001s_0000s_0003_Tumbler-Icon.png" />  
-
-                    <img src="image9-11/image_0007s_0001s_0000s_0004_Pinterest-Icon.png" />  
-
-                    <img src="image9-11/image_0007s_0001s_0000s_0005_LinkedIn-Icon.png" />
-
-                </p>
-
-            </div>
-
-        </div>
-<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1020273485&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:1020273485:41" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
-    </footer>
-
- 
-
+ <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1020273485&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:1020273485:41" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+<canvas id="c"></canvas>
 </body>
-
- 
-
 </html>
+
+
+
 
 
 
